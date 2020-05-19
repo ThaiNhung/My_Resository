@@ -2,9 +2,10 @@ const imageUpload = document.getElementById('imageUpload')// Upload some images 
 
 Promise.all([
   //model
-  faceapi.nets.faceRecognitionNet.loadFromUri('https://raw.githubusercontent.com/lamtuanvutv/face-recognition/master/models'),// This is library which we use to face recorgnize -The path contains the image
-  faceapi.nets.faceLandmark68Net.loadFromUri('https://raw.githubusercontent.com/lamtuanvutv/face-recognition/master/models'),
-  faceapi.nets.ssdMobilenetv1.loadFromUri('https://raw.githubusercontent.com/lamtuanvutv/face-recognition/master/models')
+  faceapi.nets.faceRecognitionNet.loadFromUri('https://raw.githubusercontent.com/ThaiNhung/My_Resository/face-recognition-master/master/models'),// This is library which we use to face recorgnize -The path contains the image
+  faceapi.nets.faceLandmark68Net.loadFromUri('https://raw.githubusercontent.com/ThaiNhung/My_Resository/face-recognition-master/master/models'),
+  faceapi.nets.ssdMobilenetv1.loadFromUri('https://raw.githubusercontent.com/ThaiNhung/My_Resository/face-recognition-master/master/models')
+  //https://raw.githubusercontent.com/lamtuanvutv/face-recognition/master/models
 ]).then(start)
 
 async function start() {
@@ -47,7 +48,7 @@ function loadLabeledImages() {
       const descriptions = []
       for (let i = 1; i <= 2; i++) {
         // const img = await faceapi.fetchImage(`https://raw.githubusercontent.com/WebDevSimplified/Face-Recognition-JavaScript/master/labeled_images/${label}/${i}.jpg`)
-        const img = await faceapi.fetchImage(`https://raw.githubusercontent.com/ThaiNhung/My_Resository/master/labeled_images/${label}/${i}.jpg`)
+        const img = await faceapi.fetchImage(`https://raw.githubusercontent.com/ThaiNhung/My_Resository/face-recognition-master/master/labeled_images/${label}/${i}.jpg`)
         const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
         descriptions.push(detections.descriptor)
       }
