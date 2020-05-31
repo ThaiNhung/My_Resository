@@ -9,13 +9,14 @@ Promise.all([
 
 async function start() {
    // we will create some rectangles coresspond to each images
-  const container = document.createElement('div') //create the variable  container 
+  const container = document.createElement('div')//create the variable container - 
   container.style.position = 'relative' // make sure we can recieve the option which we want 
   document.body.append(container)
   const labeledFaceDescriptors = await loadLabeledImages()
-  const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.6)
-  let image
-  let canvas
+  //match the face descriptors of the detected faces from our input image to our reference data
+  const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.6)// maxDescriptorDistance = 0.6 is a good distance threshold value to judge
+  let image //initial variable by let in JS
+  let canvas //the canvas element is used to draw graphics on a web page
   document.body.append('Loaded')// display the message on screen which we want 
    //this function below use when wantting change anything image from input
   imageUpload.addEventListener('change', async () => {
@@ -26,13 +27,15 @@ async function start() {
     canvas = faceapi.createCanvasFromMedia(image)// use this comment when we want create the image as canvas form
     container.append(canvas)
     const displaySize = { width: image.width, height: image.height }// display size for diffirent image 
-    faceapi.matchDimensions(canvas, displaySize)
+    faceapi.matchDimensions(canvas, displaySize)//resize the canvas to match the input image
     const detections = await faceapi.detectAllFaces(image).withFaceLandmarks().withFaceDescriptors()// call variable faceDetect to detectallface then descripts for each image above
     //document.body.append(detections.length) // this comment to know length of image
+    //The returned bounding boxes and landmark positions are relative to the original image / media size. In case the displayed image size does not correspond to the original image size you can simply resize
     const resizedDetections = faceapi.resizeResults(detections, displaySize)
     const results = resizedDetections.map(d => faceMatcher.findBestMatch(d.descriptor))
     results.forEach((result, i) => {
       const box = resizedDetections[i].detection.box
+      //draw the bounding boxes together with their labels into a canvas to display the results
       const drawBox = new faceapi.draw.DrawBox(box, { label: result.toString() })
       drawBox.draw(canvas)
     })
@@ -47,7 +50,9 @@ function loadLabeledImages() {
       const descriptions = []
       for (let i = 1; i <= 2; i++) {
         // const img = await faceapi.fetchImage(`https://raw.githubusercontent.com/WebDevSimplified/Face-Recognition-JavaScript/master/labeled_images/${label}/${i}.jpg`)
+        // fetch image data from urls and convert blob to HTMLImage element
         const img = await faceapi.fetchImage(`https://raw.githubusercontent.com/ThaiNhung/My_Resository/master/face-recognition-master/labeled_images/${label}/${i}.jpg`)
+        //detect the face with the highest score in the image and compute it's landmarks and face descriptor
         const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
         descriptions.push(detections.descriptor)
       }
