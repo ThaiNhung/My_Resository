@@ -44,7 +44,7 @@ async function start() {
  // To recognition portion where we can put the diffirent name instead of just generic text 'Face' on each face person.
  //In order to do that we need to parse all the images which we put in the labeled_images folder. => this function below to just put it all the way down here
 function loadLabeledImages() {
-  const labels = ['Black Widow', 'Captain America', 'Captain Marvel', 'Hawkeye', 'Jim Rhodes', 'Thor', 'Tony Stark', 'Nhung', 'Hanh']
+  const labels = ['Black Widow', 'Captain America', 'Captain Marvel', 'Hawkeye', 'Jim Rhodes', 'Thor', 'Tony Stark', 'Nhung', 'ThanhSang', 'Trung']
   return Promise.all(
     labels.map(async label => {
       const descriptions = []
@@ -57,6 +57,13 @@ function loadLabeledImages() {
         const fullFaceDescription = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
         if (!fullFaceDescription) {
           throw new Error(`no faces detected for ${label}`)
+        }
+        var imgLength = 0
+        if(label == "Trung"){
+          imgLength = imgLength+1
+          console.log(imgLength)
+          console.log(fullFaceDescription)
+          
         }
     
     const faceDescriptors = [fullFaceDescription.descriptor]
